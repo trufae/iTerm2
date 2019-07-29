@@ -10,6 +10,9 @@
 #import "ITAddressBookMgr.h"
 #import "NSColor+iTerm.h"
 
+extern bool tabColorSet;
+extern CGFloat tabColor[3];
+
 const int kColorMapForeground = 0;
 const int kColorMapBackground = 1;
 const int kColorMapBold = 2;
@@ -311,8 +314,13 @@ const int kColorMapAnsiBrightModifier = 8;
         memmove(dimmedRgb, mutedRgb, sizeof(CGFloat) * 3);
     }
     dimmedRgb[3] = backgroundRgb[3];
-
-    if (!memcmp(_lastBackgroundComponents, dimmedRgb, sizeof(CGFloat) * 4)) {
+if (tabColorSet) {
+	dimmedRgb[0] = tabColor[0];
+	dimmedRgb[1] = tabColor[1];
+	dimmedRgb[2] = tabColor[2];
+	dimmedRgb[3] = 1.0;
+}
+    if (tabColorSet && !memcmp(_lastBackgroundComponents, dimmedRgb, sizeof(CGFloat) * 4)) {
         return _lastBackgroundColor;
     } else {
         [_lastBackgroundColor autorelease];

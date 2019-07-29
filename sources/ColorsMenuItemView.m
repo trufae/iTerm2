@@ -26,17 +26,32 @@
 
 #import "ColorsMenuItemView.h"
 
+CGFloat tabColor[3];
+bool tabColorSet = false;
+
+void setBackgroundColor(NSColor *color) {
+	// set global backgroundcolor
+	const CGFloat* rgb = CGColorGetComponents(color.CGColor);
+	if (rgb) {
+		tabColorSet = true;
+		// CGColorGetComponents(testColor.CGColor);
+		tabColor [0] = rgb[0];
+		tabColor [1] = rgb[1];
+		tabColor [2] = rgb[2];
+	}
+}
+
 @interface ColorsMenuItemView()
 @property(nonatomic, retain) NSColor *color;
 @end
 
 @implementation ColorsMenuItemView
 
-const int kNumberOfColors = 8;
+const int kNumberOfColors = 10;
 const int kColorAreaOffsetX = 20;
 const int kColorAreaOffsetY = 10;
-const int kColorAreaDistanceX = 18;
-const int kColorAreaDimension = 12;
+const int kColorAreaDistanceX = 16;
+const int kColorAreaDimension = 16; // 12;
 const int kColorAreaBorder = 1;
 const int kDefaulColorOffset = 2;
 const int kDefaultColorDimension = 8;
@@ -53,7 +68,9 @@ enum {
     kMenuItemGreen = 4,
     kMenuItemBlue = 5,
     kMenuItemPurple = 6,
-    kMenuItemGray = 7
+    kMenuItemGray = 7,
+    kMenuItemBlack = 8,
+    kMenuItemWhite = 9
 };
 
 - (void)dealloc {
@@ -113,6 +130,18 @@ enum {
                         [NSColor colorWithDeviceRed:150.0/255.0 green:150.0/255.0 blue:150.0/255.0 alpha:1.0], 0.0,
                         [NSColor colorWithDeviceRed:130.0/255.0 green:130.0/255.0 blue:130.0/255.0 alpha:1.0], 0.5,
                         [NSColor colorWithDeviceRed:120.0/255.0 green:120.0/255.0 blue:120.0/255.0 alpha:1.0], 1.0, nil];
+            break;
+        case kMenuItemBlack:
+            gradient = [[NSGradient alloc] initWithColorsAndLocations:
+                        [NSColor colorWithDeviceRed:50.0/255.0 green:50.0/255.0 blue:50.0/255.0 alpha:1.0], 0.0,
+                        [NSColor colorWithDeviceRed:30.0/255.0 green:30.0/255.0 blue:30.0/255.0 alpha:1.0], 0.5,
+                        [NSColor colorWithDeviceRed:20.0/255.0 green:20.0/255.0 blue:20.0/255.0 alpha:1.0], 1.0, nil];
+            break;
+        case kMenuItemWhite:
+            gradient = [[NSGradient alloc] initWithColorsAndLocations:
+                        [NSColor colorWithDeviceRed:250.0/255.0 green:250.0/255.0 blue:250.0/255.0 alpha:1.0], 0.0,
+                        [NSColor colorWithDeviceRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0], 0.5,
+                        [NSColor colorWithDeviceRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1.0], 1.0, nil];
             break;
     }
 
@@ -189,30 +218,41 @@ enum {
                 colorIndex >= 0 && colorIndex < kNumberOfColors) {
             switch (colorIndex) {
                 case kMenuItemDefault:
-                    self.color = nil;
+                    // self.color = nil;
+		    // tabColorSet = false;
+                    // sources/PTYTextView.m:- (NSColor *)defaultBackgroundColor {
+                    self.color = [NSColor colorWithDeviceRed:0 green:0 blue:0 alpha:1.0];
+		    // TODO PANCAKE: reset to theme color
                     break;
                 case kMenuItemRed:
-                    self.color = [NSColor colorWithDeviceRed:251.0/255.0 green:107.0/255.0 blue:98.0/255.0 alpha:1.0];
+                    self.color = [NSColor colorWithDeviceRed:70.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0];
                     break;
                 case kMenuItemOrange:
-                    self.color = [NSColor colorWithDeviceRed:246.0/255.0 green:172.0/255.0 blue:71.0/255.0 alpha:1.0];
+                    self.color = [NSColor colorWithDeviceRed:100.0/255.0 green:72.0/255.0 blue:41.0/255.0 alpha:1.0];
                     break;
                 case kMenuItemYellow:
-                    self.color = [NSColor colorWithDeviceRed:240.0/255.0 green:220.0/255.0 blue:79.0/255.0 alpha:1.0];
+                    self.color = [NSColor colorWithDeviceRed:70.0/255.0 green:70.0/255.0 blue:40.0/255.0 alpha:1.0];
                     break;
                 case kMenuItemGreen:
-                    self.color = [NSColor colorWithDeviceRed:181.0/255.0 green:215.0/255.0 blue:73.0/255.0 alpha:1.0];
+                    self.color = [NSColor colorWithDeviceRed:20.0/255.0 green:80.0/255.0 blue:20.0/255.0 alpha:1.0];
                     break;
                 case kMenuItemBlue:
-                    self.color = [NSColor colorWithDeviceRed:95.0/255.0 green:163.0/255.0 blue:248.0/255.0 alpha:1.0];
+                    self.color = [NSColor colorWithDeviceRed:2.0/255.0 green:30.0/255.0 blue:80.0/255.0 alpha:1.0];
                     break;
                 case kMenuItemPurple:
-                    self.color = [NSColor colorWithDeviceRed:193.0/255.0 green:142.0/255.0 blue:217.0/255.0 alpha:1.0];
+                    self.color = [NSColor colorWithDeviceRed:54.0/255.0 green:1.0/255.0 blue:89.0/255.0 alpha:1.0];
                     break;
                 case kMenuItemGray:
-                    self.color = [NSColor colorWithDeviceRed:120.0/255.0 green:120.0/255.0 blue:120.0/255.0 alpha:1.0];
+                    self.color = [NSColor colorWithDeviceRed:30.0/255.0 green:30.0/255.0 blue:30.0/255.0 alpha:1.0];
+                    break;
+                case kMenuItemBlack:
+                    self.color = [NSColor colorWithDeviceRed:0 green:0 blue:0 alpha:1.0];
+                    break;
+                case kMenuItemWhite:
+                    self.color = [NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0];
                     break;
             }
+	    setBackgroundColor(self.color);
             // perform the menu action (set the color)
             NSInteger menuIndex = [m indexOfItem: mitem];
             [m performActionForItemAtIndex: menuIndex];

@@ -26,6 +26,10 @@
 
 #import "PTYTabView.h"
 
+
+extern bool tabColorSet;
+extern CGFloat tabColor[3];
+
 const NSUInteger kAllModifiers = (NSControlKeyMask |
                                   NSCommandKeyMask |
                                   NSAlternateKeyMask |
@@ -114,6 +118,8 @@ const NSUInteger kAllModifiers = (NSControlKeyMask |
 
 - (void)selectTabViewItem:(NSTabViewItem *)tabViewItem {
     [super selectTabViewItem:tabViewItem];
+// update bgcolor if set
+printf ("TAB\n");
 
     if (!_isCyclingWithModifierPressed) {
         [_tabViewItemsInMRUOrder removeObject:tabViewItem];

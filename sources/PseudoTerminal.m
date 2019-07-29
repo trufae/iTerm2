@@ -88,6 +88,10 @@
 #import <QuartzCore/QuartzCore.h>
 #include <unistd.h>
 
+extern bool tabColorSet;
+extern CGFloat tabColor[3];
+extern void setBackgroundColor(NSColor *color);
+
 @class QLPreviewPanel;
 
 NSString *const kCurrentSessionDidChange = @"kCurrentSessionDidChange";
@@ -4749,6 +4753,7 @@ return NO;
 
 // This updates the window's background color and title text color as well as the tab bar's color.
 - (void)updateTabColors {
+//// tabColorSet = false;
     for (PTYTab *aTab in [self tabs]) {
         NSTabViewItem *tabViewItem = [aTab tabViewItem];
         PTYSession *aSession = [aTab activeSession];
@@ -4756,11 +4761,15 @@ return NO;
         [_contentView.tabBarControl setTabColor:color forTabViewItem:tabViewItem];
         if ([_contentView.tabView selectedTabViewItem] == tabViewItem) {
             NSColor* newTabColor = [_contentView.tabBarControl tabColorForTabViewItem:tabViewItem];
+
+
             if ([_contentView.tabView numberOfTabViewItems] == 1 &&
                 [iTermPreferences boolForKey:kPreferenceKeyHideTabBar] &&
                 newTabColor) {
-                [self setBackgroundColor:newTabColor];
-
+		    if (tabColorSet) {
+			    setBackgroundColor (newTabColor);
+			    [self setBackgroundColor:newTabColor];
+		    }
                 [_contentView setColor:newTabColor];
             } else {
                 [self setBackgroundColor:nil];
@@ -7272,8 +7281,14 @@ return NO;
 
     ColorsMenuItemView *menuItem = (ColorsMenuItemView *)[sender view];
     NSColor *color = menuItem.color;
+        PTYSession *activeSession = [aTab activeSession];
     for (PTYSession *aSession in [aTab sessions]) {
         [aSession setTabColor:color];
+	if (aSession == activeSession) {
+		// set bgcolor of terminal too
+//		NSColor *color = [aSession tabColor];
+		setBackgroundColor(color);
+	}
     }
     [self updateTabColors];
 }
